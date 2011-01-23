@@ -71,7 +71,7 @@ public class Flip3DView extends FrameLayout {
         }
     }
 
-    private final void setImageParameters(final ImageView imageView,
+    private void setImageParameters(final ImageView imageView,
             final Drawable drawable) {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT, Gravity.CENTER);
@@ -117,7 +117,7 @@ public class Flip3DView extends FrameLayout {
      * @param drawable
      *            drawable for front.
      */
-    public void setImageFrontDrawable(final Drawable drawable) {
+    public final void setImageFrontDrawable(final Drawable drawable) {
         final ImageView imageViewFront = new ImageView(getContext());
         setImageParameters(imageViewFront, drawable);
         setViewFront(imageViewFront);
@@ -129,7 +129,7 @@ public class Flip3DView extends FrameLayout {
      * @param drawable
      *            drawable for back.
      */
-    public void setImageBackDrawable(final Drawable drawable) {
+    public final void setImageBackDrawable(final Drawable drawable) {
         final ImageView imageViewBack = new ImageView(getContext());
         setImageParameters(imageViewBack, drawable);
         setViewBack(imageViewBack);
