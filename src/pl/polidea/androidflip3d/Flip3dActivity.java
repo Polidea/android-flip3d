@@ -3,12 +3,9 @@ package pl.polidea.androidflip3d;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class Flip3dActivity extends Activity
-{
-    /** Called when the activity is first created. */
+public class Flip3dActivity extends Activity {
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }

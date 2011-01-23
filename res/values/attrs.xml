@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <declare-styleable name="Flip3DView">
+        <attr name="src_front" format="reference|color" />
+        <attr name="src_back" format="reference|color" />
+    </declare-styleable>
+</resources>
