@@ -23,10 +23,10 @@ public class Flip3DView extends FrameLayout {
         public void onClick(final View view) {
             if (isFirstView) {
                 applyRotation(0, -90);
-                isFirstView = !isFirstView;
+                isFirstView = false;
             } else {
                 applyRotation(0, 90);
-                isFirstView = !isFirstView;
+                isFirstView = true;
             }
         }
     }
@@ -39,7 +39,7 @@ public class Flip3DView extends FrameLayout {
     public Flip3DView(final Context context, final AttributeSet attrs,
             final int defStyle) {
         super(context, attrs, defStyle);
-        initializeViews(context);
+        initializeViews();
         parseAttributes(context, attrs);
     }
 
@@ -49,10 +49,10 @@ public class Flip3DView extends FrameLayout {
 
     public Flip3DView(final Context context) {
         super(context);
-        initializeViews(context);
+        initializeViews();
     }
 
-    void parseAttributes(final Context context, final AttributeSet attrs) {
+    private void parseAttributes(final Context context, final AttributeSet attrs) {
         final TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.Flip3DView);
         try {
@@ -71,7 +71,7 @@ public class Flip3DView extends FrameLayout {
         }
     }
 
-    private void setImageParameters(final ImageView imageView,
+    private final void setImageParameters(final ImageView imageView,
             final Drawable drawable) {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT, Gravity.CENTER);
@@ -89,7 +89,7 @@ public class Flip3DView extends FrameLayout {
      * @param viewFront
      *            front view
      */
-    public void setViewFront(final View viewFront) {
+    public final void setViewFront(final View viewFront) {
         if (this.viewFront != null) {
             this.removeView(this.viewFront);
         }
@@ -103,7 +103,7 @@ public class Flip3DView extends FrameLayout {
      * @param viewBack
      *            back view
      */
-    public void setViewBack(final View viewBack) {
+    public final void setViewBack(final View viewBack) {
         if (this.viewBack != null) {
             this.removeView(this.viewBack);
         }
@@ -135,7 +135,7 @@ public class Flip3DView extends FrameLayout {
         setViewBack(imageViewBack);
     }
 
-    private void initializeViews(final Context context) {
+    private void initializeViews() {
         setImageFrontDrawable(new ColorDrawable(Color.BLUE));
         setImageBackDrawable(new ColorDrawable(Color.RED));
     }
