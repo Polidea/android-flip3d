@@ -9,31 +9,34 @@ import android.view.animation.DecelerateInterpolator;
  */
 public final class SwapViews implements Runnable {
     private final boolean mIsFirstView;
-    private final View image1;
-    private final View image2;
+    private final View view1;
+    private final View view2;
 
-    public SwapViews(final boolean isFirstView, final View image1, final View image2) {
+    public SwapViews(final boolean isFirstView, final View view1,
+            final View view2) {
         mIsFirstView = isFirstView;
-        this.image1 = image1;
-        this.image2 = image2;
+        this.view1 = view1;
+        this.view2 = view2;
     }
 
     @Override
     public void run() {
-        final float centerX = image1.getWidth() / 2.0f;
-        final float centerY = image1.getHeight() / 2.0f;
+        final float centerX = view1.getWidth() / 2.0f;
+        final float centerY = view1.getHeight() / 2.0f;
         Flip3DAnimation rotation;
 
         if (mIsFirstView) {
-            image1.setVisibility(View.INVISIBLE);
-            image2.setVisibility(View.VISIBLE);
-            image2.requestFocus();
+            view1.setVisibility(View.INVISIBLE);
+            view2.setVisibility(View.VISIBLE);
+            view2.requestFocus();
+            view2.setClickable(true);
 
             rotation = new Flip3DAnimation(90, 0, centerX, centerY);
         } else {
-            image2.setVisibility(View.INVISIBLE);
-            image1.setVisibility(View.VISIBLE);
-            image1.requestFocus();
+            view2.setVisibility(View.INVISIBLE);
+            view1.setVisibility(View.VISIBLE);
+            view1.requestFocus();
+            view1.setClickable(true);
             rotation = new Flip3DAnimation(-90, 0, centerX, centerY);
         }
 
@@ -42,9 +45,9 @@ public final class SwapViews implements Runnable {
         rotation.setInterpolator(new DecelerateInterpolator());
 
         if (mIsFirstView) {
-            image2.startAnimation(rotation);
+            view2.startAnimation(rotation);
         } else {
-            image1.startAnimation(rotation);
+            view1.startAnimation(rotation);
         }
     }
 }

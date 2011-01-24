@@ -4,7 +4,10 @@
     <pl.polidea.androidflip3d.Flip3DView
        xmlns:flip3d="http://schemas.android.com/apk/res/pl.polidea.androidflip3d"
        flip3d:src_front="@drawable/icon" flip3d:src_back="@android:color/white"
-       android:layout_width="100dip" android:layout_height="100dip" android:visibility="visible"
+       android:layout_width="100dip"
+       android:layout_height="100dip"
+       flip3d:internal_padding="10dip"
+       android:visibility="visible"
     />
 </LinearLayout>
 
