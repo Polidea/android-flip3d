@@ -128,7 +128,7 @@ public class Flip3DView extends FrameLayout {
      * @param animationLength
      *            length of animation in milliseconds
      */
-    public void setAnimationLength(final long animationLength) {
+    public synchronized void setAnimationLength(final long animationLength) {
         this.animationLength = animationLength;
     }
 
@@ -173,7 +173,7 @@ public class Flip3DView extends FrameLayout {
         }
     }
 
-    private void parseOtherAttributes(final TypedArray a) {
+    private synchronized void parseOtherAttributes(final TypedArray a) {
         animationLength = a.getInt(
                 R.styleable.Flip3DView_animation_length_millis,
                 DEFAULT_ANIMATION_LENGTH);
@@ -194,11 +194,11 @@ public class Flip3DView extends FrameLayout {
      *  1 - RIGHT
      * </pre>
      * 
-     * @param backToFront
+     * @param direction
      *            rotation direction
      */
-    public void setFrontToBack(final int frontToBack) {
-        this.frontToBack = frontToBack;
+    public synchronized void setFrontToBack(final int direction) {
+        this.frontToBack = direction;
     }
 
     /**
@@ -210,11 +210,11 @@ public class Flip3DView extends FrameLayout {
      *  1 - RIGHT
      * </pre>
      * 
-     * @param backToFront
+     * @param direction
      *            rotation direction
      */
-    public void setBackToFront(final int backToFront) {
-        this.backToFront = backToFront;
+    public synchronized void setBackToFront(final int direction) {
+        this.backToFront = direction;
     }
 
     /**
@@ -240,7 +240,7 @@ public class Flip3DView extends FrameLayout {
      * @param view
      *            view to set
      */
-    private final void setView(final int viewSide, final View view) {
+    private void setView(final int viewSide, final View view) {
         if (this.views[viewSide] != null) {
             this.removeView(this.views[viewSide]);
         }
@@ -268,8 +268,7 @@ public class Flip3DView extends FrameLayout {
         setView(ViewIndex.BACK_VIEW, viewBack);
     }
 
-    private final void setImageDrawable(final int viewSide,
-            final Drawable drawable) {
+    private void setImageDrawable(final int viewSide, final Drawable drawable) {
         final LinearLayout v = (LinearLayout) inflate(getContext(),
                 R.layout.image_layout_with_padding, null);
         v.setPadding(internalPadding, internalPadding, internalPadding,
@@ -306,7 +305,7 @@ public class Flip3DView extends FrameLayout {
         setImageBackDrawable(new ColorDrawable(Color.RED));
     }
 
-    private void initializeViewState() {
+    private synchronized void initializeViewState() {
         final int theOtherViewIndex = ViewIndex
                 .getTheOtherViewIndex(currentViewIndex);
         views[currentViewIndex].setVisibility(View.VISIBLE);
@@ -318,7 +317,7 @@ public class Flip3DView extends FrameLayout {
     }
 
     /**
-     * Applies rotation according to direction
+     * Starts rotation according to direction.
      * 
      * @param direction
      *            direction (0 - LEFT, 1 - RIGHT)
@@ -373,9 +372,7 @@ public class Flip3DView extends FrameLayout {
         setFlipping(false);
         currentViewIndex = targetViewIndex;
         if (beingForced) {
-            if (currentViewIndex != forcedIndex) {
-                startRotationToTheOtherSide(false, false);
-            } else {
+            if (currentViewIndex == forcedIndex) {
                 beingForced = false;
                 views[currentViewIndex].requestFocus();
                 views[currentViewIndex].setOnClickListener(clickListener);
@@ -384,6 +381,8 @@ public class Flip3DView extends FrameLayout {
                     flip3dViewListener.onFinishedFlipping(Flip3DView.this,
                             currentViewIndex, false);
                 }
+            } else {
+                startRotationToTheOtherSide(false, false);
             }
         } else {
             views[currentViewIndex].requestFocus();
@@ -411,7 +410,7 @@ public class Flip3DView extends FrameLayout {
         }
     }
 
-    public void setFlip3DViewListener(
+    public synchronized void setFlip3DViewListener(
             final Flip3DViewListener flip3dViewListener) {
         this.flip3dViewListener = flip3dViewListener;
     }

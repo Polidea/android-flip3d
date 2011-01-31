@@ -27,9 +27,11 @@ public final class GetToTheMiddleOfFlipping implements
      *            length of animation
      * @param direction
      *            direction in which to animate
+     * @param finishFlippingListener
+     *            listener to run on finishing flipping
      */
     public GetToTheMiddleOfFlipping(final int originalViewIndex,
-            final View[] views, final long animationLength,
+            final View[] views, final long animationLength, // NOPMD
             final int direction, final AnimationListener finishFlippingListener) {
         this.originalViewIndex = originalViewIndex;
         this.views = views;

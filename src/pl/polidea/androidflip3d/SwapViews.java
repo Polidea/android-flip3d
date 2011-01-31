@@ -29,7 +29,8 @@ public final class SwapViews implements Runnable {
      * @param finishFlippingListener
      *            what to do when the whole animation is finished
      */
-    public SwapViews(final int originalViewIndex, final View[] views,
+    public SwapViews(final int originalViewIndex,
+            final View[] views, // NOPMD
             final long animationLenght, final int direction,
             final AnimationListener finishFlippingListener) {
         this.currentViewIndex = originalViewIndex;

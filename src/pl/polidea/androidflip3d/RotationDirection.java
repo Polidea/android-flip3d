@@ -4,7 +4,7 @@ package pl.polidea.androidflip3d;
  * Class for controling rotation direction in non-enum mode.
  * 
  */
-public class RotationDirection {
+public final class RotationDirection {
 
     private RotationDirection() {
         // no instantiation.

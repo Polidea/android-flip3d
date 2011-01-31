@@ -4,7 +4,7 @@ package pl.polidea.androidflip3d;
  * Non-enum implementation of front/back view index.
  * 
  */
-public class ViewIndex {
+public final class ViewIndex {
     /**
      * Front view.
      */
@@ -19,13 +19,13 @@ public class ViewIndex {
     }
 
     /**
-     * Get the other view index
+     * Get the other view index.
      * 
      * @param viewIndex
      *            index
      * @return the other index
      */
-    public static final int getTheOtherViewIndex(final int viewIndex) {
+    public static int getTheOtherViewIndex(final int viewIndex) {
         return viewIndex == FRONT_VIEW ? BACK_VIEW : FRONT_VIEW;
     }
 }
