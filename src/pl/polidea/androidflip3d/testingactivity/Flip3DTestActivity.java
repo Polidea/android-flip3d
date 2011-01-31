@@ -10,7 +10,7 @@ import android.os.Bundle;
  * Just a test activity to test the behaviour of the flip image.
  * 
  */
-public class Flip3DActivity extends Activity {
+public class Flip3DTestActivity extends Activity {
     private Flip3DView firstView;
     private Flip3DView secondView;
     private Flip3DView thirdView;
