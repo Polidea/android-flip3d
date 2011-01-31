@@ -14,6 +14,21 @@ public final class ViewIndex {
      */
     public static final int BACK_VIEW = 1;
 
+    /**
+     * Unmovable, transparent background view.
+     */
+    public static final int BACKGROUND_VIEW = 2;
+
+    /**
+     * Front transparent background view. Used to block clicks while flipping.
+     */
+    public static final int FOREGROUND_VIEW = 3;
+
+    /**
+     * Number of views..
+     */
+    public static final int VIEW_NUMBER = 4;
+
     private ViewIndex() {
         // no instantiation.
     }
@@ -27,5 +42,27 @@ public final class ViewIndex {
      */
     public static int getTheOtherViewIndex(final int viewIndex) {
         return viewIndex == FRONT_VIEW ? BACK_VIEW : FRONT_VIEW;
+    }
+
+    /**
+     * Return textual description of view type
+     * 
+     * @param id
+     *            id of the view
+     * @return type
+     */
+    public static final String getViewType(final int id) {
+        switch (id) {
+        case FRONT_VIEW:
+            return "FRONT";
+        case BACK_VIEW:
+            return "BACK";
+        case BACKGROUND_VIEW:
+            return "BACKGROUND";
+        case FOREGROUND_VIEW:
+            return "FOREGROUND";
+        default:
+            return "UNKNOWN";
+        }
     }
 }
