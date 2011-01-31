@@ -4,5 +4,14 @@
         <attr name="internal_padding" format="dimension" />
         <attr name="src_front" format="reference|color" />
         <attr name="src_back" format="reference|color" />
+        <attr name="animation_length_millis" format="integer" />
+        <attr name="front_to_back_flip_direction">
+            <enum name="rotate_right" value="0"/>
+            <enum name="rotate_left" value="1"/>
+        </attr>
+        <attr name="back_to_front_flip_direction">
+            <enum name="rotate_right" value="0"/>
+            <enum name="rotate_left" value="1"/>
+        </attr>
     </declare-styleable>
 </resources>
