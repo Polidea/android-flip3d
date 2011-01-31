@@ -251,12 +251,13 @@ public class Flip3DView extends FrameLayout {
      * @param view
      *            view to set
      */
-    private void setView(final int viewSide, final View view) {
+    private void setView(final int viewSide, final FrameLayout view) {
         if (this.views[viewSide] != null) {
             this.removeView(this.views[viewSide]);
         }
         this.views[viewSide] = view;
         view.setId(viewSide);
+        view.setLayoutParams(layoutParams);
         this.addView(view);
     }
 
