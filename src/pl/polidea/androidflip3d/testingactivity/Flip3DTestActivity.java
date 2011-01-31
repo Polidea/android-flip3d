@@ -85,8 +85,8 @@ public class Flip3DTestActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         // ids retrieved dynamically -> avoid errors when importing as library
         super.onCreate(savedInstanceState);
-        setContentView(this.getResources().getIdentifier("main_test_activity",
-                "layout", "pl.polidea.androidflip3d"));
+        setContentView(this.getResources().getIdentifier("main", "layout",
+                "pl.polidea.androidflip3d"));
         firstView = (Flip3DView) findViewById(this.getResources()
                 .getIdentifier("firstView", "id", PACKAGE_NAME));
         firstView.setFlip3DViewListener(new FirstViewListener());
