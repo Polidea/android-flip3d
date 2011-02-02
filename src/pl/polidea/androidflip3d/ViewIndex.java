@@ -15,11 +15,6 @@ public final class ViewIndex {
     public static final int BACK_VIEW = 1;
 
     /**
-     * Unmovable, transparent background view.
-     */
-    public static final int BACKGROUND_VIEW = 2;
-
-    /**
      * Front transparent background view. Used to block clicks while flipping.
      */
     public static final int FOREGROUND_VIEW = 3;
@@ -57,12 +52,10 @@ public final class ViewIndex {
             return "FRONT";
         case BACK_VIEW:
             return "BACK";
-        case BACKGROUND_VIEW:
-            return "BACKGROUND";
         case FOREGROUND_VIEW:
             return "FOREGROUND";
         default:
-            return "UNKNOWN";
+            return "BACKGROUND";
         }
     }
 }

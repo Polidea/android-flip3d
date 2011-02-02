@@ -1,7 +1,8 @@
 package pl.polidea.androidflip3d.testingactivity;
 
 import pl.polidea.androidflip3d.Flip3DView;
-import pl.polidea.androidflip3d.Flip3DView.Flip3DViewListener;
+import pl.polidea.androidflip3d.Flip3DViewState;
+import pl.polidea.androidflip3d.Flip3DViewState.Flip3DViewListener;
 import pl.polidea.androidflip3d.ViewIndex;
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,74 +13,68 @@ import android.os.Bundle;
  */
 public class Flip3DTestActivity extends Activity {
     private static final String PACKAGE_NAME = "pl.polidea.androidflip3d";
-    private Flip3DView firstView;
-    private Flip3DView secondView;
-    private Flip3DView thirdView;
-    private Flip3DView fourthView;
+    private static final int NUM_VIEWS = 4;
+    private final Flip3DViewState[] viewStates = new Flip3DViewState[NUM_VIEWS];
+    private final Flip3DView[] views = new Flip3DView[NUM_VIEWS];
 
-    private class FirstViewListener implements Flip3DViewListener {
+    private final Flip3DViewListener[] listeners = { new Flip3DViewListener() {
         @Override
-        public void onStartedFlipping(final Flip3DView view,
-                final int startingSide, final boolean clicked) {
-            if (clicked) {
-                secondView.forceMoveTo(ViewIndex.FRONT_VIEW);
+        public void onStartedFlipping(final Flip3DViewState view,
+                final int startingSide, final boolean manuallyTriggered) {
+            if (manuallyTriggered && startingSide == ViewIndex.FRONT_VIEW) {
+                viewStates[1].forceMoveTo(ViewIndex.FRONT_VIEW);
             }
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DView view,
-                final int endingSide, final boolean clicked) {
+        public void onFinishedFlipping(final Flip3DViewState view,
+                final int endingSide, final boolean manuallyTriggered) {
             // do nothing
         }
-    }
-
-    private class SecondViewListener implements Flip3DViewListener {
+    }, new Flip3DViewListener() {
         @Override
-        public void onStartedFlipping(final Flip3DView view,
-                final int startingSide, final boolean clicked) {
-            if (clicked) {
-                firstView.forceMoveTo(ViewIndex.FRONT_VIEW);
+        public void onStartedFlipping(final Flip3DViewState view,
+                final int startingSide, final boolean manuallyTriggered) {
+            if (manuallyTriggered) {
+                viewStates[0].forceMoveTo(ViewIndex.FRONT_VIEW);
             }
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DView view,
-                final int endingSide, final boolean clicked) {
+        public void onFinishedFlipping(final Flip3DViewState view,
+                final int endingSide, final boolean manuallyTriggered) {
             // do nothing
         }
-    }
-
-    private class ThirdViewListener implements Flip3DViewListener {
+    }, new Flip3DViewListener() {
         @Override
-        public void onStartedFlipping(final Flip3DView view,
-                final int startingSide, final boolean clicked) {
+        public void onStartedFlipping(final Flip3DViewState view,
+                final int startingSide, final boolean manuallyTriggered) {
             // do nothing
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DView view,
-                final int endingSide, final boolean clicked) {
-            if (clicked) {
-                fourthView.forceMoveTo(ViewIndex.BACK_VIEW);
+        public void onFinishedFlipping(final Flip3DViewState view,
+                final int endingSide, final boolean manuallyTriggered) {
+            if (manuallyTriggered && endingSide == ViewIndex.FRONT_VIEW) {
+                viewStates[3].forceMoveTo(ViewIndex.BACK_VIEW);
             }
         }
-    }
+    }, new Flip3DViewListener() {
 
-    private class FourthViewListener implements Flip3DViewListener {
         @Override
-        public void onStartedFlipping(final Flip3DView view,
-                final int startingSide, final boolean clicked) {
+        public void onStartedFlipping(final Flip3DViewState view,
+                final int startingSide, final boolean manuallyTriggered) {
             // do nothing
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DView view,
-                final int endingSide, final boolean clicked) {
-            if (clicked) {
-                thirdView.forceMoveTo(ViewIndex.BACK_VIEW);
+        public void onFinishedFlipping(final Flip3DViewState view,
+                final int endingSide, final boolean manuallyTriggered) {
+            if (manuallyTriggered) {
+                viewStates[2].forceMoveTo(ViewIndex.BACK_VIEW);
             }
         }
-    }
+    } };
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -87,17 +82,13 @@ public class Flip3DTestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(this.getResources().getIdentifier("main", "layout",
                 "pl.polidea.androidflip3d"));
-        firstView = (Flip3DView) findViewById(this.getResources()
-                .getIdentifier("firstView", "id", PACKAGE_NAME));
-        firstView.setFlip3DViewListener(new FirstViewListener());
-        secondView = (Flip3DView) findViewById(this.getResources()
-                .getIdentifier("secondView", "id", PACKAGE_NAME));
-        secondView.setFlip3DViewListener(new SecondViewListener());
-        thirdView = (Flip3DView) findViewById(this.getResources()
-                .getIdentifier("thirdView", "id", PACKAGE_NAME));
-        thirdView.setFlip3DViewListener(new ThirdViewListener());
-        fourthView = (Flip3DView) findViewById(this.getResources()
-                .getIdentifier("fourthView", "id", PACKAGE_NAME));
-        fourthView.setFlip3DViewListener(new FourthViewListener());
+        for (int i = 0; i < NUM_VIEWS; i++) {
+            views[i] = (Flip3DView) findViewById(this.getResources()
+                    .getIdentifier("view" + i, "id", PACKAGE_NAME));
+            viewStates[i] = new Flip3DViewState(i);
+            viewStates[i].setView(views[i]);
+            viewStates[i].setFlip3dViewListener(listeners[i]);
+
+        }
     }
 }

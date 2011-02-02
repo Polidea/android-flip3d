@@ -3,12 +3,12 @@
 	android:layout_height="fill_parent" android:orientation="vertical">
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
 		android:layout_height="fill_parent" android:orientation="horizontal" android:layout_weight="1">
-		<pl.polidea.androidflip3d.Flip3DView android:id="@+id/firstView"
+		<pl.polidea.androidflip3d.Flip3DView android:id="@+id/view0"
 			xmlns:flip3d="http://schemas.android.com/apk/res/pl.polidea.androidflip3d" flip3d:src_front="@drawable/icon"
 			flip3d:src_back="@android:color/white" flip3d:internal_padding="10dip" flip3d:animation_length_millis="500"
 			flip3d:front_to_back_flip_direction="rotate_right" flip3d:back_to_front_flip_direction="rotate_left"
 			android:layout_width="100dip" android:layout_height="100dip" android:visibility="visible" />
-		<pl.polidea.androidflip3d.Flip3DView android:id="@+id/secondView"
+		<pl.polidea.androidflip3d.Flip3DView android:id="@+id/view1"
 			xmlns:flip3d="http://schemas.android.com/apk/res/pl.polidea.androidflip3d" flip3d:src_front="@drawable/icon"
 			flip3d:src_back="@android:color/darker_gray" flip3d:internal_padding="10dip" flip3d:animation_length_millis="500"
 			flip3d:front_to_back_flip_direction="rotate_left" flip3d:back_to_front_flip_direction="rotate_right"
@@ -16,12 +16,12 @@
 	</LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent"
         android:layout_height="fill_parent" android:orientation="horizontal" android:layout_weight="1">
-        <pl.polidea.androidflip3d.Flip3DView android:id="@+id/thirdView"
+        <pl.polidea.androidflip3d.Flip3DView android:id="@+id/view2"
             xmlns:flip3d="http://schemas.android.com/apk/res/pl.polidea.androidflip3d"
             flip3d:src_back="@android:color/white" flip3d:internal_padding="10dip" flip3d:animation_length_millis="500"
             flip3d:front_to_back_flip_direction="rotate_right" flip3d:back_to_front_flip_direction="rotate_left"
             android:layout_width="100dip" android:layout_height="100dip" android:visibility="visible" />
-        <pl.polidea.androidflip3d.Flip3DView android:id="@+id/fourthView"
+        <pl.polidea.androidflip3d.Flip3DView android:id="@+id/view3"
             xmlns:flip3d="http://schemas.android.com/apk/res/pl.polidea.androidflip3d" flip3d:src_front="@drawable/icon"
             flip3d:internal_padding="10dip" flip3d:animation_length_millis="500"
             flip3d:front_to_back_flip_direction="rotate_left" flip3d:back_to_front_flip_direction="rotate_right"
