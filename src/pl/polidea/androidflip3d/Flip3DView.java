@@ -264,7 +264,7 @@ public class Flip3DView extends FrameLayout {
                 internalPadding);
         final ImageView imageView = (ImageView) frame
                 .findViewById(R.id.padded_view);
-        imageView.setScaleType(ScaleType.CENTER_INSIDE);
+        imageView.setScaleType(ScaleType.FIT_CENTER);
         setImageParameters(imageView, drawable);
         setView(viewSide, frame);
     }
