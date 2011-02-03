@@ -31,5 +31,6 @@ public class GridTestActivity extends Activity {
         final TestGridAdapter adapter = new TestGridAdapter(this, screenWidth
                 / 3 - margin);
         gridView.setAdapter(adapter);
+        gridView.setRecyclerListener(adapter);
     }
 }

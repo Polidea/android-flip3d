@@ -418,4 +418,15 @@ public class Flip3DView extends FrameLayout {
                 + backToFront + ", listenerDelegate=" + listenerDelegate
                 + ", listener=" + listener + "]";
     }
+
+    /**
+     * Cancels all animations running for the view.
+     */
+    public void clearAllAnimations() {
+        for (int i = 0; i < ViewIndex.VIEW_NUMBER; i++) {
+            if (views[i] != null) {
+                views[i].clearAnimation();
+            }
+        }
+    }
 }

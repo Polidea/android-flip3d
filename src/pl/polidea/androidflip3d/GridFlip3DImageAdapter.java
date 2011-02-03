@@ -7,6 +7,7 @@ import java.util.List;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.RecyclerListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 
@@ -20,9 +21,10 @@ import android.widget.GridView;
  *            the view itself
  * 
  */
-public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, FlipView extends Flip3DView> extends
-        BaseAdapter {
-    private static final String TAG = GridFlip3DImageAdapter.class.getSimpleName();
+public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, FlipView extends Flip3DView>
+        extends BaseAdapter implements RecyclerListener {
+    private static final String TAG = GridFlip3DImageAdapter.class
+            .getSimpleName();
     static final int MAX_IMAGES = 20;
 
     private final List<State> viewStates = new ArrayList<State>(MAX_IMAGES);
@@ -58,14 +60,16 @@ public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, Flip
 
     @SuppressWarnings("unchecked")
     @Override
-    public synchronized View getView(final int position, final View convertView, final ViewGroup parent) {
+    public synchronized View getView(final int position,
+            final View convertView, final ViewGroup parent) {
         if (checkifExtraCall(position, convertView)) { // DIRTY HACK ... BUT
                                                        // THIS IS THE ONLY WAY
                                                        // WITH GRID VIEW
             return convertView == null ? createView() : convertView;
         }
         FlipView newView;
-        Log.v(TAG, "getView at position " + position + ". Previous view : " + convertView + " Parent" + parent);
+        Log.v(TAG, "getView at position " + position + ". Previous view : "
+                + convertView + " Parent" + parent);
         if (convertView != null) {
             Log.v(TAG, "Reusing view at position " + position);
             newView = (FlipView) convertView;
@@ -104,4 +108,12 @@ public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, Flip
         }
         return false;
     }
+
+    @Override
+    public synchronized void onMovedToScrapHeap(final View view) {
+        for (final Flip3DViewState s : viewStates) {
+            s.detachView((Flip3DView) view);
+        }
+    }
+
 }

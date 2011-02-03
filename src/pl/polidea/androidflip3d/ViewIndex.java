@@ -17,12 +17,12 @@ public final class ViewIndex {
     /**
      * Front transparent background view. Used to block clicks while flipping.
      */
-    public static final int FOREGROUND_VIEW = 3;
+    public static final int FOREGROUND_VIEW = 2;
 
     /**
      * Number of views..
      */
-    public static final int VIEW_NUMBER = 4;
+    public static final int VIEW_NUMBER = 3;
 
     private ViewIndex() {
         // no instantiation.
