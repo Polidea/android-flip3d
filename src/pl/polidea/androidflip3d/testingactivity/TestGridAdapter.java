@@ -25,10 +25,12 @@ public class TestGridAdapter extends
     private final List<TestFlip3DViewState> states = new ArrayList<TestFlip3DViewState>(
             MAX);
     private final Context context;
+    private final int imageWidth;
 
     public TestGridAdapter(final Context context, final int imageWidth) {
         super(imageWidth);
         this.context = context;
+        this.imageWidth = imageWidth;
         for (int i = 0; i < MAX; i++) {
             final Random r = new Random();
             final byte[] b = new byte[4];
@@ -50,7 +52,8 @@ public class TestGridAdapter extends
     protected void prepareView(final int position, final Flip3DView view) {
         final TestFlip3DViewState newState = Flip3DViewState
                 .attachViewToViewState(position, states, view);
-        view.setInternalPadding(5);
+        view.setInternalPadding(0);
+        view.setInternalMargin((int) (imageWidth * 0.01f));
         final int res = context.getResources().getIdentifier("icon",
                 "drawable", "pl.polidea.androidflip3d");
         view.setImageBackDrawable(context.getResources().getDrawable(res));
