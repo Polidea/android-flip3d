@@ -1,5 +1,6 @@
 package pl.polidea.androidflip3d;
 
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -10,6 +11,9 @@ import android.view.animation.Animation.AnimationListener;
  */
 public final class GetToTheMiddleOfFlipping implements
         Animation.AnimationListener {
+    private static final String TAG = GetToTheMiddleOfFlipping.class
+            .getSimpleName();
+
     private final int originalViewIndex;
     private final View[] views;
     private final long animationLength;
@@ -42,18 +46,18 @@ public final class GetToTheMiddleOfFlipping implements
 
     @Override
     public void onAnimationStart(final Animation animation) {
-        // do nothing. No need
+        Log.v(TAG, "Animation started.");
     }
 
     @Override
     public void onAnimationEnd(final Animation animation) {
         views[originalViewIndex].post(new SwapViews(originalViewIndex, views,
                 animationLength, direction, finishFlippingListener));
+        Log.v(TAG, "Animation finished.");
     }
 
     @Override
     public void onAnimationRepeat(final Animation animation) {
-        // do nothing. No need
     }
 
 }

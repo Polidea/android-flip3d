@@ -1,5 +1,7 @@
 package pl.polidea.androidflip3d;
 
+import java.util.Arrays;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -49,7 +51,9 @@ public class Flip3DView extends FrameLayout {
     private final OnClickListener listenerDelegate = new OnClickListener() {
         @Override
         public void onClick(final View v) {
+            Log.v(TAG, "Delegate clicked on view " + v.getId() + ", view:" + v);
             if (listener != null) {
+                Log.v(TAG, "Finding the listener.");
                 listener.onClick(v);
             }
         }
@@ -79,6 +83,7 @@ public class Flip3DView extends FrameLayout {
 
     public Flip3DView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
+        setId(-1);
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Flip3DView);
         try {
             parsePaddingAttributes(a);
@@ -96,6 +101,7 @@ public class Flip3DView extends FrameLayout {
 
     public Flip3DView(final Context context) {
         super(context);
+        setId(-1);
         initializeViews();
     }
 
@@ -267,20 +273,25 @@ public class Flip3DView extends FrameLayout {
         setImageForegroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private synchronized void initializeViewState() {
-        views[ViewIndex.FRONT_VIEW].setVisibility(View.VISIBLE);
-        setViewClickability(ViewIndex.FRONT_VIEW, true);
-        views[ViewIndex.BACK_VIEW].setVisibility(View.INVISIBLE);
-        setViewClickability(ViewIndex.BACK_VIEW, false);
+    protected synchronized void initializeViewState(final int currentViewIndex) {
         views[ViewIndex.FOREGROUND_VIEW].setVisibility(View.INVISIBLE);
-        setViewClickability(ViewIndex.FOREGROUND_VIEW, true);
+        setViewClickability(ViewIndex.FOREGROUND_VIEW, false);
+        views[ViewIndex.BACK_VIEW].setVisibility(currentViewIndex == ViewIndex.BACK_VIEW ? View.VISIBLE
+                : View.INVISIBLE);
+        setViewClickability(ViewIndex.BACK_VIEW, currentViewIndex == ViewIndex.BACK_VIEW);
+        views[ViewIndex.FRONT_VIEW].setVisibility(currentViewIndex == ViewIndex.FRONT_VIEW ? View.VISIBLE
+                : View.INVISIBLE);
+        setViewClickability(ViewIndex.FRONT_VIEW, currentViewIndex == ViewIndex.FRONT_VIEW);
+
     }
 
     public void setViewClickability(final int viewIndex, final boolean enable) {
+        Log.v(TAG, "Setting view clickability for view " + getId() + " " + ViewIndex.getViewType(viewIndex) + " to "
+                + enable);
         final View view = views[viewIndex];
         view.setClickable(true);
         if (enable) {
-            if (view.getId() == ViewIndex.FOREGROUND_VIEW) {
+            if (viewIndex == ViewIndex.FOREGROUND_VIEW) {
                 // always ignore clicks on foreground view
                 view.setOnClickListener(clickHidingListener);
             } else {
@@ -304,6 +315,7 @@ public class Flip3DView extends FrameLayout {
      *            starting index of view which to animate
      */
     public synchronized void startRotation(final int currentViewIndex) {
+        Log.v(TAG, "Starting rotation from " + ViewIndex.getViewType(currentViewIndex));
         final int direction = currentViewIndex == ViewIndex.FRONT_VIEW ? frontToBack : backToFront;
         setFlipping(true);
         final float centerX = getWidth() / 2.0f;
@@ -316,11 +328,9 @@ public class Flip3DView extends FrameLayout {
         rotation.setAnimationListener(new GetToTheMiddleOfFlipping(currentViewIndex, views, animationLength, direction,
                 finishFlippingListener));
         views[currentViewIndex].startAnimation(rotation);
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        initializeViewState();
+        Log.v(TAG, " View: " + views[currentViewIndex] + ",Parent: " + views[currentViewIndex].getParent()
+                + " View grandParent " + views[currentViewIndex].getParent().getParent());
+        Log.v(TAG, "Animation started in " + currentViewIndex + " on view " + views[currentViewIndex]);
     }
 
     public void setFlipping(final boolean flipping) {
@@ -338,6 +348,7 @@ public class Flip3DView extends FrameLayout {
 
     @Override
     public void setOnClickListener(final OnClickListener l) {
+        Log.v(TAG, "Setting the listener to " + l + " on view " + getId());
         super.setOnClickListener(l);
         this.listener = l;
     }
@@ -346,8 +357,18 @@ public class Flip3DView extends FrameLayout {
      * Listener to listen for flipping finished.
      * 
      * @param finishFlippingListener
+     *            listener to listen to finish flipping
      */
     public void setFinishFlippingListener(final AnimationListener finishFlippingListener) {
         this.finishFlippingListener = finishFlippingListener;
+    }
+
+    @Override
+    public String toString() {
+        return "Flip3DView [layoutParams=" + layoutParams + ", clickHidingListener=" + clickHidingListener
+                + ", finishFlippingListener=" + finishFlippingListener + ", views=" + Arrays.toString(views)
+                + ", internalPadding=" + internalPadding + ", animationLength=" + animationLength + ", frontToBack="
+                + frontToBack + ", backToFront=" + backToFront + ", listenerDelegate=" + listenerDelegate
+                + ", listener=" + listener + "]";
     }
 }

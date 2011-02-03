@@ -22,7 +22,7 @@ public class Flip3DTestActivity extends Activity {
         public void onStartedFlipping(final Flip3DViewState view,
                 final int startingSide, final boolean manuallyTriggered) {
             if (manuallyTriggered && startingSide == ViewIndex.FRONT_VIEW) {
-                viewStates[1].forceMoveTo(ViewIndex.FRONT_VIEW);
+                viewStates[1].forceFlipTo(ViewIndex.FRONT_VIEW);
             }
         }
 
@@ -36,7 +36,7 @@ public class Flip3DTestActivity extends Activity {
         public void onStartedFlipping(final Flip3DViewState view,
                 final int startingSide, final boolean manuallyTriggered) {
             if (manuallyTriggered) {
-                viewStates[0].forceMoveTo(ViewIndex.FRONT_VIEW);
+                viewStates[0].forceFlipTo(ViewIndex.FRONT_VIEW);
             }
         }
 
@@ -56,7 +56,7 @@ public class Flip3DTestActivity extends Activity {
         public void onFinishedFlipping(final Flip3DViewState view,
                 final int endingSide, final boolean manuallyTriggered) {
             if (manuallyTriggered && endingSide == ViewIndex.FRONT_VIEW) {
-                viewStates[3].forceMoveTo(ViewIndex.BACK_VIEW);
+                viewStates[3].forceFlipTo(ViewIndex.BACK_VIEW);
             }
         }
     }, new Flip3DViewListener() {
@@ -71,7 +71,7 @@ public class Flip3DTestActivity extends Activity {
         public void onFinishedFlipping(final Flip3DViewState view,
                 final int endingSide, final boolean manuallyTriggered) {
             if (manuallyTriggered) {
-                viewStates[2].forceMoveTo(ViewIndex.BACK_VIEW);
+                viewStates[2].forceFlipTo(ViewIndex.BACK_VIEW);
             }
         }
     } };
@@ -91,4 +91,5 @@ public class Flip3DTestActivity extends Activity {
 
         }
     }
+
 }

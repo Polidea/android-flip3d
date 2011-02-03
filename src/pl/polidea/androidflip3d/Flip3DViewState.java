@@ -1,5 +1,7 @@
 package pl.polidea.androidflip3d;
 
+import java.util.List;
+
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -18,13 +20,9 @@ public class Flip3DViewState {
     private final View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(final View view) {
-            Log.d(TAG,
-                    id + ": Click executed on view: "
-                            + ViewIndex.getViewType(view.getId()));
+            Log.d(TAG, id + ": Click executed on view: " + ViewIndex.getViewType(view.getId()));
             targetViewIndex = ViewIndex.getTheOtherViewIndex(currentViewIndex);
-            Log.d(TAG,
-                    id + " Set target to: "
-                            + ViewIndex.getViewType(targetViewIndex));
+            Log.d(TAG, id + " Set target to: " + ViewIndex.getViewType(targetViewIndex));
             startRotationToTheOtherSide(true, true);
         }
     };
@@ -77,15 +75,14 @@ public class Flip3DViewState {
          * (and previously set on the other side). It will not be triggered when
          * forced and it is either on correct side or still flipping.
          * 
-         * @param view
-         *            view originating the event
+         * @param viewState
+         *            viewstate originating the event
          * @param startingSide
          *            starting side of flipping (0 - FRONT, 1- BACK)
          * @param manuallyTriggered
          *            true when view was actually clicked and not forced to flip
          */
-        void onStartedFlipping(Flip3DViewState viewState, int startingSide,
-                boolean manuallyTriggered);
+        void onStartedFlipping(Flip3DViewState viewState, int startingSide, boolean manuallyTriggered);
 
         /**
          * Reported when flipping is successfully finished. It will not be
@@ -93,7 +90,7 @@ public class Flip3DViewState {
          * immediately because we are coming back. It will also be called when
          * animation is canceled because view is moved out of the visible area.
          * 
-         * @param view
+         * @param viewState
          *            view originating the event
          * @param endingSide
          *            ending side of flipping (0 - FRONT, 1- BACK)
@@ -103,8 +100,7 @@ public class Flip3DViewState {
          *            status can be cancelled if the view is forced before it
          *            manages to flip
          */
-        void onFinishedFlipping(Flip3DViewState viewState, int endingSide,
-                boolean manuallyTriggered);
+        void onFinishedFlipping(Flip3DViewState viewState, int endingSide, boolean manuallyTriggered);
     }
 
     private int currentViewIndex = ViewIndex.FRONT_VIEW;
@@ -121,8 +117,7 @@ public class Flip3DViewState {
         return flip3dViewListener;
     }
 
-    public void setFlip3dViewListener(
-            final Flip3DViewListener flip3dViewListener) {
+    public void setFlip3dViewListener(final Flip3DViewListener flip3dViewListener) {
         this.flip3dViewListener = flip3dViewListener;
     }
 
@@ -152,7 +147,9 @@ public class Flip3DViewState {
 
     public void setFlipping(final boolean flipping) {
         this.flipping = flipping;
-        view.setFlipping(flipping);
+        if (view != null) {
+            view.setFlipping(flipping);
+        }
     }
 
     public void setBeingForced(final boolean beingForced) {
@@ -164,9 +161,21 @@ public class Flip3DViewState {
     }
 
     public synchronized void setView(final Flip3DView view) {
+        Log.v(TAG, "Set view " + (view == null ? "<null>" : view.getId()) + " to state");
+        if (this.view != null) {
+            this.currentViewIndex = targetViewIndex;
+            if (flipping) {
+                setStateAfterFlippingFinished(!beingForced);
+            }
+        }
+        this.targetViewIndex = currentViewIndex;
+        this.flipping = false;
+        this.beingForced = false;
         this.view = view;
         if (view != null) {
+            Log.v(TAG, "Set listener to " + clickListener + " on view " + view.getId());
             view.setOnClickListener(clickListener);
+            view.initializeViewState(currentViewIndex);
         }
     }
 
@@ -175,31 +184,24 @@ public class Flip3DViewState {
      * needed - if view is already in desired state, does nothing).
      * 
      * @param viewIndex
-     *            index of view to force
+     *            index to which
      */
-    public synchronized void forceMoveTo(final int viewIndex) {
+    public synchronized void forceFlipTo(final int viewIndex) {
         if (beingForced) {
-            Log.d(TAG,
-                    id + ": Already forced to "
-                            + ViewIndex.getViewType(targetViewIndex));
+            Log.d(TAG, id + ": Already forced to " + ViewIndex.getViewType(targetViewIndex));
             return;
         }
         Log.d(TAG, id + ": Forcing move to " + ViewIndex.getViewType(viewIndex));
         targetViewIndex = viewIndex;
         if (flipping) {
-            Log.d(TAG,
-                    id + ": Already flipping. Set target to "
-                            + ViewIndex.getViewType(viewIndex));
+            Log.d(TAG, id + ": Already flipping. Set target to " + ViewIndex.getViewType(viewIndex));
             beingForced = true;
         } else if (currentViewIndex != targetViewIndex) {
-            Log.d(TAG, id + ": Not flipping but need to flip back to "
-                    + ViewIndex.getViewType(viewIndex));
+            Log.d(TAG, id + ": Not flipping but need to flip back to " + ViewIndex.getViewType(viewIndex));
             beingForced = true;
             startRotationToTheOtherSide(true, false);
         } else {
-            Log.d(TAG,
-                    id + ": Already in the right state: "
-                            + ViewIndex.getViewType(viewIndex));
+            Log.d(TAG, id + ": Already in the right state: " + ViewIndex.getViewType(viewIndex));
         }
     }
 
@@ -211,19 +213,15 @@ public class Flip3DViewState {
      *            index to which we just flipped
      */
     private synchronized void oneSideFlippingEnded(final int newStateIndex) {
-        Log.d(TAG,
-                id + ": Ended flipping to "
-                        + ViewIndex.getViewType(newStateIndex));
+        Log.d(TAG, id + ": Ended flipping to " + ViewIndex.getViewType(newStateIndex));
         currentViewIndex = newStateIndex;
         setFlipping(false);
         if (beingForced) {
-            if (targetViewIndex == newStateIndex) {
+            if (targetViewIndex == newStateIndex || view == null) {
                 beingForced = false;
                 setStateAfterFlippingFinished(false);
             } else {
-                Log.d(TAG,
-                        id + ": Flipping back, forcibly to "
-                                + ViewIndex.getViewType(targetViewIndex));
+                Log.d(TAG, id + ": Flipping back, forcibly to " + ViewIndex.getViewType(targetViewIndex));
                 startRotationToTheOtherSide(false, false);
             }
         } else {
@@ -242,11 +240,9 @@ public class Flip3DViewState {
      * @param manuallyTriggered
      *            if the flip has been manually triggered
      */
-    private synchronized void setStateAfterFlippingFinished(
-            final boolean manuallyTriggered) {
+    private synchronized void setStateAfterFlippingFinished(final boolean manuallyTriggered) {
         Log.d(TAG,
-                id + ": " + getMode(manuallyTriggered)
-                        + ": Flipping finished to "
+                id + ": " + getMode(manuallyTriggered) + ": Flipping finished to "
                         + ViewIndex.getViewType(targetViewIndex));
         currentViewIndex = targetViewIndex;
         if (view != null) {
@@ -254,32 +250,27 @@ public class Flip3DViewState {
             view.setViewClickability(currentViewIndex, true);
         }
         if (flip3dViewListener != null) {
-            flip3dViewListener.onFinishedFlipping(this, currentViewIndex,
-                    manuallyTriggered);
+            flip3dViewListener.onFinishedFlipping(this, currentViewIndex, manuallyTriggered);
         }
     }
 
-    private synchronized void startRotationToTheOtherSide(
-            final boolean notifyListener, final boolean manuallyTriggered) {
+    private synchronized void startRotationToTheOtherSide(final boolean notifyListener, final boolean manuallyTriggered) {
         setFlipping(true);
-        final int theOtherSide = ViewIndex
-                .getTheOtherViewIndex(currentViewIndex);
+        final int theOtherSide = ViewIndex.getTheOtherViewIndex(currentViewIndex);
         Log.v(TAG,
-                id + ": " + getMode(manuallyTriggered)
-                        + ": Started flipping from "
-                        + ViewIndex.getViewType(currentViewIndex) + " to "
-                        + ViewIndex.getViewType(theOtherSide));
+                id + ": " + getMode(manuallyTriggered) + ": Started flipping from "
+                        + ViewIndex.getViewType(currentViewIndex) + " to " + ViewIndex.getViewType(theOtherSide));
         if (notifyListener && flip3dViewListener != null) {
-            flip3dViewListener.onStartedFlipping(this, currentViewIndex,
-                    manuallyTriggered);
+            flip3dViewListener.onStartedFlipping(this, currentViewIndex, manuallyTriggered);
         }
         if (view != null) {
+            Log.d(TAG, "View is not null so setting clikability now");
             view.setViewClickability(currentViewIndex, false);
             view.setFinishFlippingListener(new FinishFlipping(theOtherSide));
             view.startRotation(currentViewIndex);
         } else {
-            oneSideFlippingEnded(ViewIndex
-                    .getTheOtherViewIndex(targetViewIndex));
+            Log.d(TAG, "View is null so finishing immediately");
+            oneSideFlippingEnded(ViewIndex.getTheOtherViewIndex(targetViewIndex));
         }
     }
 
@@ -289,8 +280,7 @@ public class Flip3DViewState {
      * @param flip3dViewListener
      *            listener.
      */
-    public synchronized void setFlip3DViewListener(
-            final Flip3DViewListener flip3dViewListener) {
+    public synchronized void setFlip3DViewListener(final Flip3DViewListener flip3dViewListener) {
         this.flip3dViewListener = flip3dViewListener;
     }
 
@@ -301,6 +291,32 @@ public class Flip3DViewState {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * Attaches or re-attaches view to the state.
+     * 
+     * @param i
+     *            position
+     * @param viewStates
+     *            list of states
+     * @param view
+     *            view to attach
+     * @param <State>
+     *            state type
+     * @return view state with the view attached - view should be set in it
+     *         after preparing.
+     */
+    public static <State extends Flip3DViewState> State attachViewToViewState(final int i,
+            final List<State> viewStates, final Flip3DView view) {
+        Log.v(TAG, "Attaching view to state " + i + " : " + view);
+        final int oldViewId = view.getId();
+        if (oldViewId >= 0 && oldViewId < viewStates.size()) {
+            final State oldState = viewStates.get(oldViewId);
+            Log.v(TAG, "Removing from old view state " + oldViewId + ", newState: " + i);
+            oldState.setView(null); // detach view from old state
+        }
+        return viewStates.get(i);
     }
 
 }
