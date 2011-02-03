@@ -53,7 +53,7 @@ public class TestGridAdapter extends
         final TestFlip3DViewState newState = Flip3DViewState
                 .attachViewToViewState(position, states, view);
         view.setInternalPadding(0);
-        view.setInternalMargin((int) (imageWidth * 0.01f));
+        view.setInternalMargin((imageWidth * 0));
         final int res = context.getResources().getIdentifier("icon",
                 "drawable", "pl.polidea.androidflip3d");
         view.setImageBackDrawable(context.getResources().getDrawable(res));

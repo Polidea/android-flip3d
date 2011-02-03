@@ -3,6 +3,7 @@ package pl.polidea.androidflip3d.testingactivity;
 import pl.polidea.androidflip3d.Flip3DView;
 import pl.polidea.androidflip3d.Flip3DViewState;
 import pl.polidea.androidflip3d.Flip3DViewState.Flip3DViewListener;
+import pl.polidea.androidflip3d.R;
 import pl.polidea.androidflip3d.ViewIndex;
 import android.app.Activity;
 import android.os.Bundle;
@@ -80,8 +81,7 @@ public class Flip3DTestActivity extends Activity {
     protected void onCreate(final Bundle savedInstanceState) {
         // ids retrieved dynamically -> avoid errors when importing as library
         super.onCreate(savedInstanceState);
-        setContentView(this.getResources().getIdentifier("main", "layout",
-                "pl.polidea.androidflip3d"));
+        setContentView(R.layout.main);
         for (int i = 0; i < NUM_VIEWS; i++) {
             views[i] = (Flip3DView) findViewById(this.getResources()
                     .getIdentifier("view" + i, "id", PACKAGE_NAME));
@@ -91,5 +91,4 @@ public class Flip3DTestActivity extends Activity {
 
         }
     }
-
 }

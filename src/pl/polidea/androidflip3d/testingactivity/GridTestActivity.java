@@ -19,11 +19,17 @@ public class GridTestActivity extends Activity {
                 "layout", "pl.polidea.androidflip3d"));
         final GridView gridView = (GridView) findViewById(this.getResources()
                 .getIdentifier("GridView", "id", "pl.polidea.androidflip3d"));
+        gridView.setHorizontalSpacing(0);
         final int screenWidth = this.getWindow().getWindowManager()
                 .getDefaultDisplay().getWidth();
+        final int margin = 10;
         Log.v(TAG, "Screen width = " + screenWidth);
-        final TestGridAdapter adapter = new TestGridAdapter(this,
-                screenWidth / 3);
+        gridView.setColumnWidth(screenWidth / 3 - margin * 2 / 3);
+        gridView.setStretchMode(GridView.NO_STRETCH);
+        gridView.setHorizontalSpacing(margin / 2);
+        gridView.setVerticalSpacing(margin / 2);
+        final TestGridAdapter adapter = new TestGridAdapter(this, screenWidth
+                / 3 - margin);
         gridView.setAdapter(adapter);
     }
 }
