@@ -5,6 +5,7 @@ import java.util.Arrays;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -31,8 +32,8 @@ public class Flip3DView extends FrameLayout {
     private static final int DEFAULT_FRONT_TO_BACK = RotationDirection.ROTATE_LEFT;
     private static final int DEFAULT_BACK_TO_FRONT = RotationDirection.ROTATE_RIGHT;
 
-    private final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT,
-            LayoutParams.FILL_PARENT);
+    private final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+            LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
     private final View.OnClickListener clickHidingListener = new View.OnClickListener() {
         @Override
@@ -93,10 +94,12 @@ public class Flip3DView extends FrameLayout {
         this.animationLength = animationLength;
     }
 
-    public Flip3DView(final Context context, final AttributeSet attrs, final int defStyle) {
+    public Flip3DView(final Context context, final AttributeSet attrs,
+            final int defStyle) {
         super(context, attrs, defStyle);
         setId(-1);
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Flip3DView);
+        final TypedArray a = context.obtainStyledAttributes(attrs,
+                R.styleable.Flip3DView);
         try {
             parsePaddingAttributes(a);
             initializeViews();
@@ -118,9 +121,14 @@ public class Flip3DView extends FrameLayout {
     }
 
     private void parsePaddingAttributes(final TypedArray a) {
-        internalPadding = a.getDimensionPixelSize(R.styleable.Flip3DView_internal_padding, DEFAULT_INTERNAL_PADDING);
-        internalMargin = a.getDimensionPixelSize(R.styleable.Flip3DView_internal_margin, DEFAULT_INTERNAL_MARGIN);
-        layoutParams.setMargins(internalMargin, internalMargin, internalMargin, internalMargin);
+        internalPadding = a.getDimensionPixelSize(
+                R.styleable.Flip3DView_internal_padding,
+                DEFAULT_INTERNAL_PADDING);
+        internalMargin = a
+                .getDimensionPixelSize(R.styleable.Flip3DView_internal_margin,
+                        DEFAULT_INTERNAL_MARGIN);
+        layoutParams.setMargins(internalMargin, internalMargin, internalMargin,
+                internalMargin);
     }
 
     private void parseImageAttributes(final TypedArray a) {
@@ -135,9 +143,15 @@ public class Flip3DView extends FrameLayout {
     }
 
     private synchronized void parseOtherAttributes(final TypedArray a) {
-        animationLength = a.getInt(R.styleable.Flip3DView_animation_length_millis, DEFAULT_ANIMATION_LENGTH);
-        frontToBack = a.getInt(R.styleable.Flip3DView_front_to_back_flip_direction, DEFAULT_FRONT_TO_BACK);
-        backToFront = a.getInt(R.styleable.Flip3DView_back_to_front_flip_direction, DEFAULT_BACK_TO_FRONT);
+        animationLength = a.getInt(
+                R.styleable.Flip3DView_animation_length_millis,
+                DEFAULT_ANIMATION_LENGTH);
+        frontToBack = a.getInt(
+                R.styleable.Flip3DView_front_to_back_flip_direction,
+                DEFAULT_FRONT_TO_BACK);
+        backToFront = a.getInt(
+                R.styleable.Flip3DView_back_to_front_flip_direction,
+                DEFAULT_BACK_TO_FRONT);
     }
 
     /**
@@ -192,7 +206,8 @@ public class Flip3DView extends FrameLayout {
      * @param drawable
      *            drawable to set
      */
-    private void setImageParameters(final ImageView imageView, final Drawable drawable) {
+    private void setImageParameters(final ImageView imageView,
+            final Drawable drawable) {
         imageView.setImageDrawable(drawable);
     }
 
@@ -235,16 +250,55 @@ public class Flip3DView extends FrameLayout {
     }
 
     private void setInternalView(final int viewSide, final View view) {
-        final FrameLayout frame = (FrameLayout) inflate(getContext(), R.layout.view_layout_with_padding, null);
-        frame.setPadding(internalPadding, internalPadding, internalPadding, internalPadding);
+        final FrameLayout frame = (FrameLayout) inflate(getContext(),
+                R.layout.view_layout_with_padding, null);
+        frame.setPadding(internalPadding, internalPadding, internalPadding,
+                internalPadding);
         frame.addView(view);
         setView(viewSide, frame);
     }
 
     private void setImageDrawable(final int viewSide, final Drawable drawable) {
-        final FrameLayout frame = (FrameLayout) inflate(getContext(), R.layout.image_layout_with_padding, null);
-        frame.setPadding(internalPadding, internalPadding, internalPadding, internalPadding);
-        final ImageView imageView = (ImageView) frame.findViewById(R.id.padded_view);
+        final FrameLayout frame = (FrameLayout) inflate(getContext(),
+                R.layout.image_layout_with_padding, null);
+        frame.setPadding(internalPadding, internalPadding, internalPadding,
+                internalPadding);
+        final ImageView imageView = new ImageView(this.getContext()) {
+            @Override
+            public void onWindowFocusChanged(final boolean hasWindowFocus) {
+                super.onWindowFocusChanged(hasWindowFocus);
+                if (getDrawable() instanceof AnimationDrawable) {
+                    final AnimationDrawable a = (AnimationDrawable) getDrawable();
+                    if (hasWindowFocus) {
+                        a.start();
+                    } else {
+                        a.stop();
+                    }
+                }
+            }
+
+            @Override
+            protected void onDetachedFromWindow() {
+                super.onDetachedFromWindow();
+                if (getDrawable() instanceof AnimationDrawable) {
+                    final AnimationDrawable a = (AnimationDrawable) getDrawable();
+                    a.stop();
+                }
+            }
+
+            @Override
+            protected void onAttachedToWindow() {
+                super.onAttachedToWindow();
+                if (getDrawable() instanceof AnimationDrawable) {
+                    final AnimationDrawable a = (AnimationDrawable) getDrawable();
+                    a.start();
+                }
+            }
+        };
+        imageView.setId(1);
+        imageView.setLayoutParams(new FrameLayout.LayoutParams(
+                LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        frame.addView(imageView);
         imageView.setScaleType(ScaleType.FIT_CENTER);
         setImageParameters(imageView, drawable);
         setView(viewSide, frame);
@@ -289,31 +343,34 @@ public class Flip3DView extends FrameLayout {
     protected synchronized void initializeViewState(final int currentViewIndex) {
         views[ViewIndex.FOREGROUND_VIEW].setVisibility(View.INVISIBLE);
         setViewClickability(ViewIndex.FOREGROUND_VIEW, false);
-        views[ViewIndex.BACK_VIEW].setVisibility(currentViewIndex == ViewIndex.BACK_VIEW ? View.VISIBLE
-                : View.INVISIBLE);
-        setViewClickability(ViewIndex.BACK_VIEW, currentViewIndex == ViewIndex.BACK_VIEW);
-        views[ViewIndex.FRONT_VIEW].setVisibility(currentViewIndex == ViewIndex.FRONT_VIEW ? View.VISIBLE
-                : View.INVISIBLE);
-        setViewClickability(ViewIndex.FRONT_VIEW, currentViewIndex == ViewIndex.FRONT_VIEW);
-
+        views[ViewIndex.BACK_VIEW]
+                .setVisibility(currentViewIndex == ViewIndex.BACK_VIEW ? View.VISIBLE
+                        : View.INVISIBLE);
+        setViewClickability(ViewIndex.BACK_VIEW,
+                currentViewIndex == ViewIndex.BACK_VIEW);
+        views[ViewIndex.FRONT_VIEW]
+                .setVisibility(currentViewIndex == ViewIndex.FRONT_VIEW ? View.VISIBLE
+                        : View.INVISIBLE);
+        setViewClickability(ViewIndex.FRONT_VIEW,
+                currentViewIndex == ViewIndex.FRONT_VIEW);
     }
 
     public void setViewClickability(final int viewIndex, final boolean enable) {
-        Log.v(TAG, "Setting view clickability for view " + getId() + " " + ViewIndex.getViewType(viewIndex) + " to "
-                + enable);
-        final View view = views[viewIndex];
-        view.setClickable(true);
+        Log.v(TAG, "Setting view clickability for view " + getId() + " "
+                + ViewIndex.getViewType(viewIndex) + " to " + enable);
+        final FrameLayout frameLayout = views[viewIndex];
+        frameLayout.setClickable(true);
         if (enable) {
             if (viewIndex == ViewIndex.FOREGROUND_VIEW) {
                 // always ignore clicks on foreground view
-                view.setOnClickListener(clickHidingListener);
+                frameLayout.setOnClickListener(clickHidingListener);
             } else {
-                view.setOnClickListener(listenerDelegate);
+                frameLayout.setOnClickListener(listenerDelegate);
             }
-            view.bringToFront();
-            view.requestFocus();
+            frameLayout.bringToFront();
+            frameLayout.requestFocus();
         } else {
-            view.setOnClickListener(clickHidingListener);
+            frameLayout.setOnClickListener(clickHidingListener);
         }
     }
 
@@ -328,22 +385,29 @@ public class Flip3DView extends FrameLayout {
      *            starting index of view which to animate
      */
     public synchronized void startRotation(final int currentViewIndex) {
-        Log.v(TAG, "Starting rotation from " + ViewIndex.getViewType(currentViewIndex));
-        final int direction = currentViewIndex == ViewIndex.FRONT_VIEW ? frontToBack : backToFront;
+        Log.v(TAG,
+                "Starting rotation from "
+                        + ViewIndex.getViewType(currentViewIndex));
+        final int direction = currentViewIndex == ViewIndex.FRONT_VIEW ? frontToBack
+                : backToFront;
         setFlipping(true);
         final float centerX = getWidth() / 2.0f;
         final float centerY = getHeight() / 2.0f;
-        final Flip3DAnimation rotation = new Flip3DAnimation(0, RotationDirection.getMultiplier(direction) * 90,
-                centerX, centerY);
+        final Flip3DAnimation rotation = new Flip3DAnimation(0,
+                RotationDirection.getMultiplier(direction) * 90, centerX,
+                centerY);
         rotation.setDuration(animationLength);
         rotation.setFillAfter(true);
         rotation.setInterpolator(new AccelerateInterpolator());
-        rotation.setAnimationListener(new GetToTheMiddleOfFlipping(currentViewIndex, views, animationLength, direction,
+        rotation.setAnimationListener(new GetToTheMiddleOfFlipping(
+                currentViewIndex, views, animationLength, direction,
                 finishFlippingListener));
         views[currentViewIndex].startAnimation(rotation);
-        Log.v(TAG, " View: " + views[currentViewIndex] + ",Parent: " + views[currentViewIndex].getParent()
-                + " View grandParent " + views[currentViewIndex].getParent().getParent());
-        Log.v(TAG, "Animation started in " + currentViewIndex + " on view " + views[currentViewIndex]);
+        Log.v(TAG, " View: " + views[currentViewIndex] + ",Parent: "
+                + views[currentViewIndex].getParent() + " View grandParent "
+                + views[currentViewIndex].getParent().getParent());
+        Log.v(TAG, "Animation started in " + currentViewIndex + " on view "
+                + views[currentViewIndex]);
     }
 
     public void setFlipping(final boolean flipping) {
@@ -372,16 +436,20 @@ public class Flip3DView extends FrameLayout {
      * @param finishFlippingListener
      *            listener to listen to finish flipping
      */
-    public void setFinishFlippingListener(final AnimationListener finishFlippingListener) {
+    public void setFinishFlippingListener(
+            final AnimationListener finishFlippingListener) {
         this.finishFlippingListener = finishFlippingListener;
     }
 
     @Override
     public String toString() {
-        return "Flip3DView [layoutParams=" + layoutParams + ", clickHidingListener=" + clickHidingListener
-                + ", finishFlippingListener=" + finishFlippingListener + ", views=" + Arrays.toString(views)
-                + ", internalPadding=" + internalPadding + ", animationLength=" + animationLength + ", frontToBack="
-                + frontToBack + ", backToFront=" + backToFront + ", listenerDelegate=" + listenerDelegate
+        return "Flip3DView [layoutParams=" + layoutParams
+                + ", clickHidingListener=" + clickHidingListener
+                + ", finishFlippingListener=" + finishFlippingListener
+                + ", views=" + Arrays.toString(views) + ", internalPadding="
+                + internalPadding + ", animationLength=" + animationLength
+                + ", frontToBack=" + frontToBack + ", backToFront="
+                + backToFront + ", listenerDelegate=" + listenerDelegate
                 + ", listener=" + listener + "]";
     }
 
