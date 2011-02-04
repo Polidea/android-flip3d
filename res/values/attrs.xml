@@ -2,6 +2,7 @@
 <resources>
      <declare-styleable name="Flip3DView">
         <attr name="internal_padding" format="dimension" />
+        <attr name="internal_margin" format="dimension" />
         <attr name="src_front" format="reference|color" />
         <attr name="src_back" format="reference|color" />
         <attr name="animation_length_millis" format="integer" />
