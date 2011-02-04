@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.RecyclerListener;
@@ -68,13 +67,9 @@ public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, Flip
             return convertView == null ? createView() : convertView;
         }
         FlipView newView;
-        Log.v(TAG, "getView at position " + position + ". Previous view : "
-                + convertView + " Parent" + parent);
         if (convertView != null) {
-            Log.v(TAG, "Reusing view at position " + position);
             newView = (FlipView) convertView;
         } else {
-            Log.v(TAG, "Creating new view at position " + position);
             newView = createView();
         }
         prepareView(position, newView);

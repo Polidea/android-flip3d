@@ -54,9 +54,7 @@ public class Flip3DView extends FrameLayout {
     private final OnClickListener listenerDelegate = new OnClickListener() {
         @Override
         public void onClick(final View v) {
-            Log.v(TAG, "Delegate clicked on view " + v.getId() + ", view:" + v);
             if (listener != null) {
-                Log.v(TAG, "Finding the listener.");
                 listener.onClick(v);
             }
         }
@@ -356,8 +354,6 @@ public class Flip3DView extends FrameLayout {
     }
 
     public void setViewClickability(final int viewIndex, final boolean enable) {
-        Log.v(TAG, "Setting view clickability for view " + getId() + " "
-                + ViewIndex.getViewType(viewIndex) + " to " + enable);
         final FrameLayout frameLayout = views[viewIndex];
         frameLayout.setClickable(true);
         if (enable) {
@@ -385,9 +381,6 @@ public class Flip3DView extends FrameLayout {
      *            starting index of view which to animate
      */
     public synchronized void startRotation(final int currentViewIndex) {
-        Log.v(TAG,
-                "Starting rotation from "
-                        + ViewIndex.getViewType(currentViewIndex));
         final int direction = currentViewIndex == ViewIndex.FRONT_VIEW ? frontToBack
                 : backToFront;
         setFlipping(true);
@@ -403,11 +396,6 @@ public class Flip3DView extends FrameLayout {
                 currentViewIndex, views, animationLength, direction,
                 finishFlippingListener));
         views[currentViewIndex].startAnimation(rotation);
-        Log.v(TAG, " View: " + views[currentViewIndex] + ",Parent: "
-                + views[currentViewIndex].getParent() + " View grandParent "
-                + views[currentViewIndex].getParent().getParent());
-        Log.v(TAG, "Animation started in " + currentViewIndex + " on view "
-                + views[currentViewIndex]);
     }
 
     public void setFlipping(final boolean flipping) {
@@ -425,7 +413,6 @@ public class Flip3DView extends FrameLayout {
 
     @Override
     public void setOnClickListener(final OnClickListener l) {
-        Log.v(TAG, "Setting the listener to " + l + " on view " + getId());
         super.setOnClickListener(l);
         this.listener = l;
     }
