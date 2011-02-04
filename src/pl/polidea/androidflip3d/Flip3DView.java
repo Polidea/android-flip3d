@@ -34,6 +34,8 @@ public class Flip3DView extends FrameLayout {
     private static final int DEFAULT_FRONT_TO_BACK = RotationDirection.ROTATE_LEFT;
     private static final int DEFAULT_BACK_TO_FRONT = RotationDirection.ROTATE_RIGHT;
 
+    private static final ScaleType DEFAULT_SCALE_TYPE = ScaleType.FIT_CENTER;
+
     private final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT,
             LayoutParams.FILL_PARENT);
 
@@ -52,6 +54,7 @@ public class Flip3DView extends FrameLayout {
     private int frontToBack = DEFAULT_FRONT_TO_BACK;
     private int backToFront = DEFAULT_BACK_TO_FRONT;
     private int internalMargin = DEFAULT_INTERNAL_MARGIN;
+    private ScaleType imageScaleType = DEFAULT_SCALE_TYPE;
 
     private final OnClickListener listenerDelegate = new OnClickListener() {
         @Override
@@ -72,6 +75,16 @@ public class Flip3DView extends FrameLayout {
      */
     public void setInternalPadding(final int internalPadding) {
         this.internalPadding = internalPadding;
+    }
+
+    /**
+     * Set image scale type.
+     * 
+     * @param imageScaleType
+     *            image scale type
+     */
+    public void setImageScaleType(final ScaleType imageScaleType) {
+        this.imageScaleType = imageScaleType;
     }
 
     /**
@@ -279,8 +292,9 @@ public class Flip3DView extends FrameLayout {
         };
         imageView.setId(IMAGE_VIEW_ID);
         imageView.setLayoutParams(new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        imageView.setScaleType(imageScaleType);
+        Log.v(TAG, "Setting scale to " + imageScaleType);
         frame.addView(imageView);
-        imageView.setScaleType(ScaleType.FIT_CENTER);
         setImageParameters(imageView, drawable);
         setView(viewSide, frame);
     }
@@ -291,7 +305,7 @@ public class Flip3DView extends FrameLayout {
      * @param drawable
      *            drawable for front.
      */
-    public final void setImageFrontDrawable(final Drawable drawable) {
+    public void setImageFrontDrawable(final Drawable drawable) {
         setImageDrawable(ViewIndex.FRONT_VIEW, drawable);
     }
 
@@ -301,7 +315,7 @@ public class Flip3DView extends FrameLayout {
      * @param drawable
      *            drawable for back.
      */
-    public final void setImageBackDrawable(final Drawable drawable) {
+    public void setImageBackDrawable(final Drawable drawable) {
         setImageDrawable(ViewIndex.BACK_VIEW, drawable);
     }
 
@@ -424,7 +438,7 @@ public class Flip3DView extends FrameLayout {
     }
 
     /**
-     * Returns view of a given index;
+     * Returns view of a given index.
      * 
      * @param viewIndex
      *            index of a view.
