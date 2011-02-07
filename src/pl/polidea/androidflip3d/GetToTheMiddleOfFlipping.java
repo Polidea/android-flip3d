@@ -9,10 +9,8 @@ import android.view.animation.Animation.AnimationListener;
  * Chooses correct view during animation. Swaps them when animation ends.
  * 
  */
-public final class GetToTheMiddleOfFlipping implements
-        Animation.AnimationListener {
-    private static final String TAG = GetToTheMiddleOfFlipping.class
-            .getSimpleName();
+public final class GetToTheMiddleOfFlipping implements Animation.AnimationListener {
+    private static final String TAG = GetToTheMiddleOfFlipping.class.getSimpleName();
 
     private final int originalViewIndex;
     private final View[] views;
@@ -34,8 +32,7 @@ public final class GetToTheMiddleOfFlipping implements
      * @param finishFlippingListener
      *            listener to run on finishing flipping
      */
-    public GetToTheMiddleOfFlipping(final int originalViewIndex,
-            final View[] views, final long animationLength, // NOPMD
+    public GetToTheMiddleOfFlipping(final int originalViewIndex, final View[] views, final long animationLength, // NOPMD
             final int direction, final AnimationListener finishFlippingListener) {
         this.originalViewIndex = originalViewIndex;
         this.views = views;
@@ -51,8 +48,8 @@ public final class GetToTheMiddleOfFlipping implements
 
     @Override
     public void onAnimationEnd(final Animation animation) {
-        views[originalViewIndex].post(new SwapViews(originalViewIndex, views,
-                animationLength, direction, finishFlippingListener));
+        views[originalViewIndex].post(new SwapViews(originalViewIndex, views, animationLength, direction,
+                finishFlippingListener));
         Log.v(TAG, "Animation finished.");
     }
 

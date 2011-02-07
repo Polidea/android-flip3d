@@ -16,8 +16,7 @@ public class Flip3DAnimation extends Animation {
     private final float mCenterY;
     private Camera mCamera;
 
-    public Flip3DAnimation(final float fromDegrees, final float toDegrees,
-            final float centerX, final float centerY) {
+    public Flip3DAnimation(final float fromDegrees, final float toDegrees, final float centerX, final float centerY) {
         super();
         mFromDegrees = fromDegrees;
         mToDegrees = toDegrees;
@@ -26,18 +25,15 @@ public class Flip3DAnimation extends Animation {
     }
 
     @Override
-    public void initialize(final int width, final int height,
-            final int parentWidth, final int parentHeight) {
+    public void initialize(final int width, final int height, final int parentWidth, final int parentHeight) {
         super.initialize(width, height, parentWidth, parentHeight);
         mCamera = new Camera();
     }
 
     @Override
-    protected void applyTransformation(final float interpolatedTime,
-            final Transformation t) {
+    protected void applyTransformation(final float interpolatedTime, final Transformation t) {
         final float fromDegrees = mFromDegrees;
-        final float degrees = fromDegrees + (mToDegrees - fromDegrees)
-                * interpolatedTime;
+        final float degrees = fromDegrees + (mToDegrees - fromDegrees) * interpolatedTime;
 
         final float centerX = mCenterX;
         final float centerY = mCenterY;

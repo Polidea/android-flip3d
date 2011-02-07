@@ -18,12 +18,10 @@ import android.util.Log;
  * Tests Flip3D in grid.
  * 
  */
-public class TestGridAdapter extends
-        AbstractGridFlip3DImageAdapter<TestFlip3DViewState, Flip3DView> {
+public class TestGridAdapter extends AbstractGridFlip3DImageAdapter<TestFlip3DViewState, Flip3DView> {
     private static final String TAG = TestGridAdapter.class.getSimpleName();
     private static final int MAX = 300;
-    private final List<TestFlip3DViewState> states = new ArrayList<TestFlip3DViewState>(
-            MAX);
+    private final List<TestFlip3DViewState> states = new ArrayList<TestFlip3DViewState>(MAX);
     private final Context context;
     private final int imageWidth;
 
@@ -50,26 +48,23 @@ public class TestGridAdapter extends
 
     @Override
     protected void prepareView(final int position, final Flip3DView view) {
-        final TestFlip3DViewState newState = Flip3DViewState
-                .attachViewToViewState(position, states, view);
+        final TestFlip3DViewState newState = Flip3DViewState.attachViewToViewState(position, states, view);
         view.setInternalPadding(0);
         view.setInternalMargin((imageWidth * 0));
-        final int res = context.getResources().getIdentifier("icon",
-                "drawable", "pl.polidea.androidflip3d");
+        final int res = context.getResources().getIdentifier("icon", "drawable", "pl.polidea.androidflip3d");
         view.setImageBackDrawable(context.getResources().getDrawable(res));
         final int color = getViewStates().get(position).getColor();
         view.setImageFrontDrawable(new ColorDrawable(color));
         newState.setFlip3dViewListener(new Flip3DViewListener() {
             @Override
-            public void onStartedFlipping(final Flip3DViewState viewState,
-                    final int startingSide, final boolean manuallyTriggered) {
+            public void onStartedFlipping(final Flip3DViewState viewState, final int startingSide,
+                    final boolean manuallyTriggered) {
 
                 if (manuallyTriggered) {
                     Log.d(TAG, "Started flipping view " + view.getId());
                     for (final Flip3DViewState flipViewState : getViewStates()) {
                         if (position != flipViewState.getId()) {
-                            Log.v(TAG, "Forcing view " + flipViewState.getId()
-                                    + " to front");
+                            Log.v(TAG, "Forcing view " + flipViewState.getId() + " to front");
                             flipViewState.forceFlipTo(ViewIndex.FRONT_VIEW);
                         }
                     }
@@ -77,8 +72,8 @@ public class TestGridAdapter extends
             }
 
             @Override
-            public void onFinishedFlipping(final Flip3DViewState viewState,
-                    final int endingSide, final boolean manuallyTriggered) {
+            public void onFinishedFlipping(final Flip3DViewState viewState, final int endingSide,
+                    final boolean manuallyTriggered) {
                 // we do nothing
             }
         });

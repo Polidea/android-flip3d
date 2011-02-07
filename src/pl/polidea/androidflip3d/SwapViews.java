@@ -29,10 +29,8 @@ public final class SwapViews implements Runnable {
      * @param finishFlippingListener
      *            what to do when the whole animation is finished
      */
-    public SwapViews(final int originalViewIndex,
-            final View[] views, // NOPMD
-            final long animationLenght, final int direction,
-            final AnimationListener finishFlippingListener) {
+    public SwapViews(final int originalViewIndex, final View[] views, // NOPMD
+            final long animationLenght, final int direction, final AnimationListener finishFlippingListener) {
         this.currentViewIndex = originalViewIndex;
         this.views = views;
         this.animationLength = animationLenght;
@@ -42,15 +40,13 @@ public final class SwapViews implements Runnable {
 
     @Override
     public void run() {
-        final int theOtherViewIndex = ViewIndex
-                .getTheOtherViewIndex(currentViewIndex);
+        final int theOtherViewIndex = ViewIndex.getTheOtherViewIndex(currentViewIndex);
         final float centerX = views[theOtherViewIndex].getWidth() / 2.0f;
         final float centerY = views[theOtherViewIndex].getHeight() / 2.0f;
         views[currentViewIndex].setVisibility(View.INVISIBLE);
         views[theOtherViewIndex].setVisibility(View.VISIBLE);
-        final Flip3DAnimation rotation = new Flip3DAnimation(
-                -RotationDirection.getMultiplier(direction) * 90, 0, centerX,
-                centerY);
+        final Flip3DAnimation rotation = new Flip3DAnimation(-RotationDirection.getMultiplier(direction) * 90, 0,
+                centerX, centerY);
         rotation.setDuration(animationLength);
         rotation.setFillAfter(true);
         rotation.setInterpolator(new DecelerateInterpolator());

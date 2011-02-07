@@ -58,8 +58,7 @@ public abstract class AbstractGridFlip3DImageAdapter<State extends Flip3DViewSta
 
     @SuppressWarnings("unchecked")
     @Override
-    public synchronized View getView(final int position,
-            final View convertView, final ViewGroup parent) {
+    public synchronized View getView(final int position, final View convertView, final ViewGroup parent) {
         if (checkifExtraCall(position, convertView)) { // DIRTY HACK ... BUT
                                                        // THIS IS THE ONLY WAY
                                                        // WITH GRID VIEW

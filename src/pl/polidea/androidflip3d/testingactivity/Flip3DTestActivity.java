@@ -19,42 +19,39 @@ public class Flip3DTestActivity extends Activity {
 
     private final Flip3DViewListener[] listeners = { new Flip3DViewListener() {
         @Override
-        public void onStartedFlipping(final Flip3DViewState view,
-                final int startingSide, final boolean manuallyTriggered) {
+        public void onStartedFlipping(final Flip3DViewState view, final int startingSide,
+                final boolean manuallyTriggered) {
             if (manuallyTriggered && startingSide == ViewIndex.FRONT_VIEW) {
                 viewStates[1].forceFlipTo(ViewIndex.FRONT_VIEW);
             }
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DViewState view,
-                final int endingSide, final boolean manuallyTriggered) {
+        public void onFinishedFlipping(final Flip3DViewState view, final int endingSide, final boolean manuallyTriggered) {
             // do nothing
         }
     }, new Flip3DViewListener() {
         @Override
-        public void onStartedFlipping(final Flip3DViewState view,
-                final int startingSide, final boolean manuallyTriggered) {
+        public void onStartedFlipping(final Flip3DViewState view, final int startingSide,
+                final boolean manuallyTriggered) {
             if (manuallyTriggered) {
                 viewStates[0].forceFlipTo(ViewIndex.FRONT_VIEW);
             }
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DViewState view,
-                final int endingSide, final boolean manuallyTriggered) {
+        public void onFinishedFlipping(final Flip3DViewState view, final int endingSide, final boolean manuallyTriggered) {
             // do nothing
         }
     }, new Flip3DViewListener() {
         @Override
-        public void onStartedFlipping(final Flip3DViewState view,
-                final int startingSide, final boolean manuallyTriggered) {
+        public void onStartedFlipping(final Flip3DViewState view, final int startingSide,
+                final boolean manuallyTriggered) {
             // do nothing
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DViewState view,
-                final int endingSide, final boolean manuallyTriggered) {
+        public void onFinishedFlipping(final Flip3DViewState view, final int endingSide, final boolean manuallyTriggered) {
             if (manuallyTriggered && endingSide == ViewIndex.FRONT_VIEW) {
                 viewStates[3].forceFlipTo(ViewIndex.BACK_VIEW);
             }
@@ -62,14 +59,13 @@ public class Flip3DTestActivity extends Activity {
     }, new Flip3DViewListener() {
 
         @Override
-        public void onStartedFlipping(final Flip3DViewState view,
-                final int startingSide, final boolean manuallyTriggered) {
+        public void onStartedFlipping(final Flip3DViewState view, final int startingSide,
+                final boolean manuallyTriggered) {
             // do nothing
         }
 
         @Override
-        public void onFinishedFlipping(final Flip3DViewState view,
-                final int endingSide, final boolean manuallyTriggered) {
+        public void onFinishedFlipping(final Flip3DViewState view, final int endingSide, final boolean manuallyTriggered) {
             if (manuallyTriggered) {
                 viewStates[2].forceFlipTo(ViewIndex.BACK_VIEW);
             }
@@ -83,8 +79,7 @@ public class Flip3DTestActivity extends Activity {
         setContentView(R.layout.main);
         final Flip3DView[] views = new Flip3DView[NUM_VIEWS];
         for (int i = 0; i < NUM_VIEWS; i++) {
-            views[i] = (Flip3DView) findViewById(this.getResources()
-                    .getIdentifier("view" + i, "id", PACKAGE_NAME));
+            views[i] = (Flip3DView) findViewById(this.getResources().getIdentifier("view" + i, "id", PACKAGE_NAME));
             viewStates[i] = new Flip3DViewState(i);
             viewStates[i].setView(views[i]);
             viewStates[i].setFlip3dViewListener(listeners[i]);
