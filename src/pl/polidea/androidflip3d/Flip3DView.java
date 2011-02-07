@@ -248,7 +248,7 @@ public class Flip3DView extends FrameLayout {
      * @param viewFront
      *            front view
      */
-    public synchronized final void setViewFront(final View viewFront) {
+    public final synchronized void setViewFront(final View viewFront) {
         setInternalView(ViewIndex.FRONT_VIEW, viewFront);
     }
 
@@ -258,7 +258,7 @@ public class Flip3DView extends FrameLayout {
      * @param viewBack
      *            back view
      */
-    public synchronized final void setViewBack(final View viewBack) {
+    public final synchronized void setViewBack(final View viewBack) {
         setInternalView(ViewIndex.BACK_VIEW, viewBack);
     }
 
