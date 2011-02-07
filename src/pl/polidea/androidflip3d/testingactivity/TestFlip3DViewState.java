@@ -2,6 +2,12 @@ package pl.polidea.androidflip3d.testingactivity;
 
 import pl.polidea.androidflip3d.Flip3DViewState;
 
+/**
+ * Test state with color.
+ * 
+ * @author potiuk
+ * 
+ */
 public class TestFlip3DViewState extends Flip3DViewState {
 
     private final int color;

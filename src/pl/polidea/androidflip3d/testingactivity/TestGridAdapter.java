@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import pl.polidea.androidflip3d.AbstractGridFlip3DImageAdapter;
 import pl.polidea.androidflip3d.Flip3DView;
 import pl.polidea.androidflip3d.Flip3DViewState;
 import pl.polidea.androidflip3d.Flip3DViewState.Flip3DViewListener;
-import pl.polidea.androidflip3d.GridFlip3DImageAdapter;
 import pl.polidea.androidflip3d.ViewIndex;
 import android.content.Context;
 import android.graphics.Color;
@@ -19,7 +19,7 @@ import android.util.Log;
  * 
  */
 public class TestGridAdapter extends
-        GridFlip3DImageAdapter<TestFlip3DViewState, Flip3DView> {
+        AbstractGridFlip3DImageAdapter<TestFlip3DViewState, Flip3DView> {
     private static final String TAG = TestGridAdapter.class.getSimpleName();
     private static final int MAX = 300;
     private final List<TestFlip3DViewState> states = new ArrayList<TestFlip3DViewState>(
@@ -79,6 +79,7 @@ public class TestGridAdapter extends
             @Override
             public void onFinishedFlipping(final Flip3DViewState viewState,
                     final int endingSide, final boolean manuallyTriggered) {
+                // we do nothing
             }
         });
 

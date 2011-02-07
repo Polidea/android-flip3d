@@ -40,13 +40,13 @@ public final class ViewIndex {
     }
 
     /**
-     * Return textual description of view type
+     * Return textual description of view type.
      * 
      * @param id
      *            id of the view
      * @return type
      */
-    public static final String getViewType(final int id) {
+    public static String getViewType(final int id) {
         switch (id) {
         case FRONT_VIEW:
             return "FRONT";

@@ -58,6 +58,7 @@ public final class GetToTheMiddleOfFlipping implements
 
     @Override
     public void onAnimationRepeat(final Animation animation) {
+        // Do nothing.
     }
 
 }

@@ -20,17 +20,16 @@ import android.widget.GridView;
  *            the view itself
  * 
  */
-public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, FlipView extends Flip3DView>
+public abstract class AbstractGridFlip3DImageAdapter<State extends Flip3DViewState, FlipView extends Flip3DView>
         extends BaseAdapter implements RecyclerListener {
-    private static final String TAG = GridFlip3DImageAdapter.class
-            .getSimpleName();
     static final int MAX_IMAGES = 20;
 
     private final List<State> viewStates = new ArrayList<State>(MAX_IMAGES);
 
     private final int itemWidth;
 
-    public GridFlip3DImageAdapter(final int itemWidth) {
+    public AbstractGridFlip3DImageAdapter(final int itemWidth) {
+        super();
         this.itemWidth = itemWidth;
     }
 
@@ -48,12 +47,12 @@ public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, Flip
     }
 
     @Override
-    public Object getItem(final int position) {
+    public Object getItem(final int position) { // NOPMD
         return null;
     }
 
     @Override
-    public long getItemId(final int position) {
+    public long getItemId(final int position) { // NOPMD
         return 0;
     }
 
@@ -67,17 +66,17 @@ public abstract class GridFlip3DImageAdapter<State extends Flip3DViewState, Flip
             return convertView == null ? createView() : convertView;
         }
         FlipView newView;
-        if (convertView != null) {
-            newView = (FlipView) convertView;
-        } else {
+        if (convertView == null) {
             newView = createView();
+        } else {
+            newView = (FlipView) convertView;
         }
         prepareView(position, newView);
         newView.setLayoutParams(new GridView.LayoutParams(itemWidth, itemWidth));
         return newView;
     }
 
-    public List<State> getViewStates() {
+    public synchronized List<State> getViewStates() {
         return Collections.unmodifiableList(viewStates);
     }
 

@@ -16,7 +16,6 @@ public class Flip3DTestActivity extends Activity {
     private static final String PACKAGE_NAME = "pl.polidea.androidflip3d";
     private static final int NUM_VIEWS = 4;
     private final Flip3DViewState[] viewStates = new Flip3DViewState[NUM_VIEWS];
-    private final Flip3DView[] views = new Flip3DView[NUM_VIEWS];
 
     private final Flip3DViewListener[] listeners = { new Flip3DViewListener() {
         @Override
@@ -82,6 +81,7 @@ public class Flip3DTestActivity extends Activity {
         // ids retrieved dynamically -> avoid errors when importing as library
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        final Flip3DView[] views = new Flip3DView[NUM_VIEWS];
         for (int i = 0; i < NUM_VIEWS; i++) {
             views[i] = (Flip3DView) findViewById(this.getResources()
                     .getIdentifier("view" + i, "id", PACKAGE_NAME));
