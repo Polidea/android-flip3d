@@ -1,21 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="pl.polidea.androidflip3d"
-      android:versionCode="6"
-      android:versionName="TEST">
-    <application android:label="@string/app_name" android:icon="@drawable/icon">
-        <activity android:name=".testingactivity.GridTestActivity"
-                  android:label="@string/app_name">
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="7" android:versionName="TEST_NEW_BUILD" package="pl.polidea.androidflip3d">
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name=".testingactivity.GridTestActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".testingactivity.Flip3DTestActivity"
-                  android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name=".testingactivity.Flip3DTestActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>
