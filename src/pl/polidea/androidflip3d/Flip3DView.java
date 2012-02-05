@@ -110,7 +110,6 @@ public class Flip3DView extends FrameLayout {
     public Flip3DView(final Context context, final AttributeSet attrs,
             final int defStyle) {
         super(context, attrs, defStyle);
-        setId(-1);
         final TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.Flip3DView);
         try {
@@ -129,7 +128,6 @@ public class Flip3DView extends FrameLayout {
 
     public Flip3DView(final Context context) {
         super(context);
-        setId(-1);
         initializeViews();
     }
 
